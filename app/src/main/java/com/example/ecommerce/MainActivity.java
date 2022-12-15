@@ -7,7 +7,19 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -20,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
 
     private String username;
     private String password;
+    private DatabaseManager databaseManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,13 +45,17 @@ public class MainActivity extends AppCompatActivity {
         connectBtn = findViewById(R.id.connectBtn);
         createAccountBtn = findViewById(R.id.createAccountBtn);
 
+        //créer une instance de DatabaseManager
+        databaseManager = new DatabaseManager(getApplicationContext());
+
         //pour récupérer les valeurs utilisateur et mot de passe
         connectBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 username = usernameEditText.getText().toString();
                 password = passwordEditText.getText().toString();
-
+                //appel de la methode connectUser() quand l'utilisateur clique sur le bouton
+                connectUser();
                 //lancer la requête pour connecter l'utilisateur
 
             }
@@ -53,5 +70,32 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+    }
+    //connection de l'api
+    public void connectUser(){
+        // 10.0.2.2 correspond en fait à localhost dans la barre url de google chrome
+        String url = "http://10.0.2.2/apituto/actions/connectUser.php";
+        //envoyer en json à notre api
+        Map<String, String> params = new HashMap<>();
+        //ajouter des paramètres
+        params.put("username", username);
+        params.put("password", password);
+        //transformer en json
+        JSONObject parameters = new JSONObject(params);
+
+        //requete en json
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, parameters, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Toast.makeText(getApplicationContext(), "OPERATION SUCCESSFUL", Toast.LENGTH_LONG).show();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getApplicationContext(), error.getMessage().toString(), Toast.LENGTH_LONG).show();
+            }
+        });
+        //passe la requete en json
+        databaseManager.queue.add(jsonObjectRequest);
     }
 }
