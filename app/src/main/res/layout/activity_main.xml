@@ -55,7 +55,7 @@
                 android:layout_marginTop="15dp"
                 android:visibility="gone">
             </TextView>
-            
+
             <EditText
                 android:id="@+id/usernameEditText"
                 android:layout_width="match_parent"
@@ -119,9 +119,9 @@
 
 
     </androidx.cardview.widget.CardView>
-    
 
-        
+
+
 
 
 
