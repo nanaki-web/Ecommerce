@@ -16,6 +16,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -67,9 +68,35 @@ public class MainActivity extends AppCompatActivity {
                 //intent sert a changer l'activity actuelle a celle CreateAccountActivity
                 Intent createAccountActivity = new Intent(getApplicationContext(), CreateAccountActivity.class);
                 startActivity(createAccountActivity);
+                finish();//detruit l'activity
             }
         });
 
+    }
+    //methode requete pour recevoir la reponse de l'api
+    public void onApiResponse(JSONObject response){
+        Boolean success = null;
+        String error = "";
+
+        try{
+            success = response.getBoolean("success");
+
+            if(success == true){
+                Intent interfaceActivity = new Intent(getApplicationContext(), InterfaceActivity.class);//aller sur cette activity
+                interfaceActivity.putExtra("username", username);//ajoute la variable username
+                startActivity(interfaceActivity);//ouvre une nouvelle activity
+                finish();//sert a detruire l'activity
+
+            }else{
+                error = response.getString("error");
+                errorConnectAccountTextView.setVisibility(View.VISIBLE);//rendre visite l'erreur
+                errorConnectAccountTextView.setText(error);//afficher l'erreur
+            }
+
+        }catch (JSONException e){
+            e.printStackTrace();//voir mieux les erreurs
+            Toast.makeText(getApplicationContext(),e.toString(), Toast.LENGTH_LONG).show();
+        }
     }
     //connection de l'api
     public void connectUser(){
@@ -87,6 +114,7 @@ public class MainActivity extends AppCompatActivity {
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, parameters, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
+                onApiResponse(response);
                 Toast.makeText(getApplicationContext(), "OPERATION SUCCESSFUL", Toast.LENGTH_LONG).show();
             }
         }, new Response.ErrorListener() {
