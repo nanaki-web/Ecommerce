@@ -99,10 +99,10 @@
 
                 <Button
                     android:id="@+id/createAccountBtn"
-                    android:layout_width="150dp"
+                    android:layout_width="200dp"
                     android:layout_height="60dp"
                     android:backgroundTint="@color/black"
-                    android:text="SE CONNECTER"
+                    android:text="Créer un compte"
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="20dp"
                     android:layout_gravity="center">

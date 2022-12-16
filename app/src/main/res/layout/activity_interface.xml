@@ -6,4 +6,14 @@
     android:layout_height="match_parent"
     tools:context=".InterfaceActivity">
 
+    <TextView
+        android:id="@+id/welcomeTextView"
+        android:layout_width="241dp"
+        android:layout_height="68dp"
+        android:text="Bienvenu"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="88dp"
+        android:textSize="50dp"
+        android:textColor="@color/black"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
